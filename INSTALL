@@ -1,0 +1,110 @@
+
+	Installation under Windows
+	--------------------------
+
+For compilation under Windows, a rudimentary Makefile is provided in the
+fig2dev subdirectory. From the commandline, navigate to this subdirectory,
+and issue the command
+
+  name /f Nmakefile
+
+For installation, you would manually have to copy the folder i18n/ to the
+location given in the Nmakefile. Chances are good that fig2dev works to
+your satisfaction also without these files. You may also give the location
+of a color definition file in the Nmakefile.
+
+Requirements
+------------
+
+At run-time, fig2dev needs ghostscript to convert fig-files to pdf, and
+ghostscript and the netpbm package to convert to any bitmap file.
+In addition, the jpeg, png, and xpm-libraries may be needed.
+
+
+	Installation under Unix, Linux, Darwin (MacOS)
+	----------------------------------------------
+
+To compile and install fig2dev, issue the commands
+
+  ./configure && make && make install
+
+When compiling from the development sources, do
+
+   autoreconf -i
+
+before giving the three commands above.
+An alternative is
+
+  ./configure CFLAGS='-O2 -Wno-parentheses' && make -j && make install-strip
+
+The latter will strip the debugging symbols from the executables.  The
+-j option causes make to try a parallel build with multiple threads.
+The CFLAGS are passed to the compiler.
+
+Optionally,
+
+  ./configure; make; make check; make install; make installcheck
+
+will run tests (make check) with the freshly built executable still at
+its location in the build tree, and (make installcheck) with the
+executable installed in its final location.
+
+Under Darwin, necessary libraries and header files are often installed
+in non-standard locations.  These locations can be given in the LDFLAGS
+and CPPFLAGS variables.  For instance, with packages installed from
+macports, try
+  ./configure LDFLAGS=-L/opt/local/lib CPPFLAGS=-I/opt/local/include
+or with packages from fink, try
+  ./configure LDFLAGS=-L/sw/lib CPPFLAGS=-I/sw/include
+
+The commands above will compile fig2dev and copy the executables fig2dev,
+fig2ps2tex and pic2tpic to /usr/local/bin.  Three man-pages for these
+binaries are put into /usr/local/man/man1.  Furthermore, files which may
+be needed at runtime are put under /usr/local/share/fig2dev.  These are
+internationalization files, which may be used by the PostScript and all
+bitmap output languages.  They are stored under
+/usr/local/share/fig2dev/i18n.
+
+
+	Options
+	-------
+
+The configure script and also the make-command can be customized in
+many ways, either by giving options, e.g., ./configure --prefix=/usr,
+or by setting variables, e.g., make CC=clang or ./configure CFLAGS=-O2.
+
+Options relevant for fig2dev are, here given with their default
+settings,
+  --prefix=/usr/local
+  --bindir=${prefix}/bin
+  --datarootdir=${prefix}/share
+  --mandir=${prefix}/man
+Compilation flags are typically
+  CC=gcc CFLAGS='-g -O2' LIBS='-lXpm -lpng -lz -lm'
+
+Try
+  ./configure --prefix=/tmp/fig2dev; make install
+and
+  ls -R /tmp/fig2dev or tree /tmp/fig2dev
+to see all files that are installed.
+
+To get a list of possible features to enable or disable, type
+  ./configure --help
+and see the "Optional Features" and "Optional Packages" sections.
+
+
+	Requirements
+	------------
+
+On debian, to build fig2dev, you will need the header files contained
+in
+  libc6-dev and linux-libc-dev.
+Optionally, to read and embed png and jpeg-images, header files
+contained in the packages
+  libpng12-dev, zlib1g-dev, libjpeg-dev,
+are needed. To read xpm images, in addition you will need
+  libxpm-dev, libxt-dev, libX11-dev.
+
+At runtime and for the tests run by make check, the packages
+  ghostscript and netpbm
+are needed to produce various bitmap output formats.
